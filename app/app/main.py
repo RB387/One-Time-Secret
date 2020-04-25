@@ -1,14 +1,13 @@
 from fastapi import FastAPI, HTTPException
-import config
+import uuid
 from .dbmanager import DataBaseManager
 from .encryption import Crypto
-import uuid
+from .config import *
 
 app = FastAPI()
 
-manager = DataBaseManager(config.DB_PATH)
-crypto = Crypto(config.SECRET_KEY)
-
+manager = DataBaseManager(DB_PATH)
+crypto = Crypto(SECRET_KEY)
 
 def generate_id() -> str:
     id = uuid.uuid4()

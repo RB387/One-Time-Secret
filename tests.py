@@ -1,10 +1,13 @@
 import unittest
 import sqlite3
 import os
-from app.encryption import Crypto
-from app.dbmanager import DataBaseManager
+from app.app.encryption import Crypto
+from app.app.dbmanager import DataBaseManager
+#from app.modules.encryption import Crypto
+#from app.modules.dbmanager import DataBaseManager
 from fastapi.testclient import TestClient
-from app.main import app
+from app.app.main import app
+#from app.main import app
 
 
 class MyTestCase(unittest.TestCase):
@@ -15,6 +18,7 @@ class MyTestCase(unittest.TestCase):
         	                                "password"	TEXT,
         	                                PRIMARY KEY("uuid"))"""
         self.db_path = os.path.join(os.getcwd(), 'test_db.db')
+        print(self.db_path)
         self.conn = sqlite3.connect(self.db_path)
         self.cursor = self.conn.cursor()
         self.cursor.execute(sql_create_table)
