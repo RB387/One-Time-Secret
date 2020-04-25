@@ -69,15 +69,27 @@ async def generate(secret: str='', password: str='') -> dict:
 
 
 @app.get('/secrets/{secret_key}')
-async def secrets(secret_key: str) -> dict:
-    '''View secret by secret-key
+async def secrets(secret_key: str, password: str='') -> dict:
+    '''View secret by secret-key and password
 
     Secret deletes after first visit
 
     If such secret doesn't exit, returns 404 error
+    If password is incorrect, returns 401 error
+    If no password in args, returns 400 error
 
     Examples:
         >>>secret_key = '/secrets/f60a0191-ce68-44dd-b741-04543b97cdef/'
+        >>>response = client.get(secret_key)
+        >>>print(response.status_code)
+        400
+
+        >>>secret_key = '/secrets/f60a0191-ce68-44dd-b741-04543b97cdef?password=wrong'
+        >>>response = client.get(secret_key)
+        >>>print(response.json())
+        401
+
+        >>>secret_key = '/secrets/f60a0191-ce68-44dd-b741-04543b97cdef?password=PASS'
         >>>response = client.get(secret_key)
         >>>print(response.json())
         {'secret': 'TEXT-MESSAGE'}
@@ -87,13 +99,22 @@ async def secrets(secret_key: str) -> dict:
         404
 
     :param secret_key: key to access
+    :param password: password for secret
     :return: JSON with text message of secret
-            that can be accessed by key 'secret'
+            that can be accessed by key 'secret' if password is correct
             {'secret' message}
     '''
     if not manager.does_exist(secret_key):
         error = 'Not found. This secret was deleted or never existed'
         raise HTTPException(status_code=404, detail=error)
-    secret = manager.select(secret_key)
-    manager.delete(secret_key)
-    return {'secret': crypto.decrypt(secret)}
+    if not password:
+        error = 'Bad request. No password argument in request.'
+        raise HTTPException(status_code=400, detail=error)
+
+    secret, password_true = manager.select(secret_key)
+    password_true = crypto.decrypt(password_true)
+    if password == password_true:
+        manager.delete(secret_key)
+        return {'secret': crypto.decrypt(secret)}
+    error = 'Wrong password'
+    raise HTTPException(status_code=401, detail=error)

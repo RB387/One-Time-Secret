@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03180438-b4bd-4533-9da2-a8b1e3e6f742" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app/dbmanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/app/dbmanager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/db.db" beforeDir="false" afterPath="$PROJECT_DIR$/app/db.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +110,7 @@
       <option name="presentableId" value="Default" />
       <updated>1587750056959</updated>
       <workItem from="1587750063195" duration="16713000" />
-      <workItem from="1587768974722" duration="17527000" />
+      <workItem from="1587768974722" duration="20176000" />
     </task>
     <servers />
   </component>
@@ -132,6 +136,6 @@
     <state x="402" y="177" width="670" height="676" key="search.everywhere.popup/0.23.1440.830@0.23.1440.830" timestamp="1587763577576" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/avito$main.coverage" NAME="main Coverage Results" MODIFIED="1587807033190" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/app" />
+    <SUITE FILE_PATH="coverage/avito$main.coverage" NAME="main Coverage Results" MODIFIED="1587821070484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/app" />
   </component>
 </project>

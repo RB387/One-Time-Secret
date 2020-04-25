@@ -36,7 +36,7 @@ class MyTestCase(unittest.TestCase):
             data_result = self.manager.select(obj.get('id'))
 
             self.assertTrue(exist_result)
-            self.assertEqual(data_result, obj.get('text'))
+            self.assertEqual(data_result, (obj.get('text'), obj.get('password')))
 
             self.manager.delete(obj.get('id'))
             exist_result = self.manager.does_exist(obj.get('id'))
@@ -66,7 +66,7 @@ class MyTestCase(unittest.TestCase):
         print('\nAPI Test: ', end='')
 
         text = 'Secret-Text'
-        password = 'Secret-password'
+        password = 'secretpass'
 
         response = self.client.get('/generate/')
         self.assertEqual(response.status_code, 400)
@@ -87,6 +87,12 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
 
         response = self.client.get(f'/secrets/{secret_id}/')
+        self.assertEqual(response.status_code, 400)
+
+        response = self.client.get(f'/secrets/{secret_id}?password=wrong')
+        self.assertEqual(response.status_code, 401)
+
+        response = self.client.get(f'/secrets/{secret_id}?password={password}')
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(response.json(), {'secret': text})
 

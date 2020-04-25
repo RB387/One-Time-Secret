@@ -76,15 +76,16 @@ class DataBaseManager:
         self.__cursor.execute(sql)
         self.__conn.commit()
 
-    def select(self, id: str) -> str:
-        '''Get text message of secret by id
+    def select(self, id: str) -> tuple:
+        '''Get text message and password of secret by id
 
         :param id: uniq id in the table
-        :return: string with text message of secret
+        :return: tuple with string text of secret and string password
+                (text: str, password: str,)
         '''
-        sql = f'SELECT text FROM SECRETS WHERE uuid = "{id}"'
+        sql = f'SELECT text, password FROM SECRETS WHERE uuid = "{id}"'
         result = self.__cursor.execute(sql).fetchone()
-        return result[0]
+        return result
 
     def delete(self, id: str) -> None:
         '''Delete row with secret from the table by id
