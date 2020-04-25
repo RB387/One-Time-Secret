@@ -49,7 +49,7 @@ async def generate(secret: str='', password: str='') -> str:
        {'secret-key': f60a0191-ce68-44dd-b741-04543b97cdef}
 
        >>>no_response = client.get('/generate/?secret=TEXT-MESSAGE')
-       >>>print(response.status_code)
+       >>>print(no_response.status_code)
        400
 
     :param secret: text message of secret
@@ -83,7 +83,7 @@ async def secrets(secret_key):
         {'secret': 'TEXT-MESSAGE'}
 
         >>>no_response = client.get(secret_key)
-        >>>print(response.status_code)
+        >>>print(no_response.status_code)
         404
 
     :param secret_key: key to access
