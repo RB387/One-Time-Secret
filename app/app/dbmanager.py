@@ -8,6 +8,11 @@ class DataBaseManager:
 
     ...
 
+    Attributes
+    ----------
+    exp_time : int
+        Time to live. Expiration time for secrets
+
     Methods
     -------
     does_exist(id: str) -> str
@@ -27,6 +32,7 @@ class DataBaseManager:
         '''
         :param path: Path to the database.
                     If such db doesn't exist then creates the new one
+        :parm exp_time: Time to live. Expiration time for secrets
         '''
         self.exp_time = exp_time
         self.__conn = sqlite3.connect(path)
