@@ -34,7 +34,7 @@ def generate_id() -> uuid.UUID:
 
 
 @app.get('/generate')
-async def generate(secret: str='', password: str='') -> str:
+async def generate(secret: str='', password: str='') -> dict:
     '''Secret generator
 
     Creates new one time secret that can be accessed by id
@@ -69,7 +69,7 @@ async def generate(secret: str='', password: str='') -> str:
 
 
 @app.get('/secrets/{secret_key}')
-async def secrets(secret_key):
+async def secrets(secret_key: str) -> dict:
     '''View secret by secret-key
 
     Secret deletes after first visit
