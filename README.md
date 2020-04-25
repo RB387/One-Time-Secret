@@ -23,3 +23,4 @@ API service for one time secrets
 ```
 docker-compose up
 ```
+Runs on '0.0.0.0:8000' by default
