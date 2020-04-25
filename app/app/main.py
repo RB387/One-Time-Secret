@@ -11,7 +11,7 @@ manager = DataBaseManager(DB_PATH, LIFE_TIME_HOURS)
 crypto = Crypto(SECRET_KEY)
 
 
-def generate_id() -> str:
+def generate_id() -> uuid.UUID:
     '''Generates uniq id
 
     UUIDs have 122 bits of entropy
