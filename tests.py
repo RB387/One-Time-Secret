@@ -3,35 +3,21 @@ import sqlite3
 import os
 from app.app.encryption import Crypto
 from app.app.dbmanager import DataBaseManager
-#from app.modules.encryption import Crypto
-#from app.modules.dbmanager import DataBaseManager
 from fastapi.testclient import TestClient
 from app.app.main import app
-#from app.main import app
 
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        sql_create_table = """CREATE TABLE "SECRETS" (
-        	                                "uuid"	TEXT NOT NULL,
-        	                                "text"	TEXT NOT NULL,
-        	                                "password"	TEXT,
-        	                                PRIMARY KEY("uuid"))"""
         self.db_path = os.path.join(os.getcwd(), 'test_db.db')
-        print(self.db_path)
-        self.conn = sqlite3.connect(self.db_path)
-        self.cursor = self.conn.cursor()
-        self.cursor.execute(sql_create_table)
-        self.conn.commit()
-        self.cursor.close()
-
+        self.manager = DataBaseManager(self.db_path, 1)
         self.client = TestClient(app)
-        self.manager = DataBaseManager(self.db_path)
 
     def tearDown(self) -> None:
         os.remove(self.db_path)
 
     def test_database(self) -> None:
+        print('\nDataBase Test: ', end='')
         objects = [
             {'id': 'id-1', 'text': 'text-1', 'password': 'password-1'},
             {'id': 'id-2', 'text': 'text-2', 'password': 'password-2'},
@@ -39,7 +25,9 @@ class MyTestCase(unittest.TestCase):
         ]
 
         for obj in objects:
-            self.manager.insert(obj.get('id'), obj.get('text'), obj.get('password'))
+            self.manager.insert(obj.get('id'),
+                                obj.get('text'),
+                                obj.get('password'))
 
         self.assertFalse(self.manager.does_exist('no-id'))
 
@@ -55,7 +43,15 @@ class MyTestCase(unittest.TestCase):
 
             self.assertFalse(exist_result)
 
+        self.manager.exp_time = 0
+        self.manager.insert('id-expired', 'text', 'pass')
+        self.assertFalse(self.manager.does_exist('id-expired'))
+
+        print('OK')
+
     def test_crypto(self) -> None:
+        print('\nCrypto Test: ', end='')
+
         crypto = Crypto('keytoencrypt')
         test_str = 'test_Text-1'
         test_encrypted_str = crypto.encrypt(test_str)
@@ -64,7 +60,11 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(test_encrypted_str, b'g67cKddqaDlrpWo9vptdKg==')
         self.assertEqual(test_decrypted_str, test_str)
 
+        print('OK')
+
     def test_api(self) -> None:
+        print('\nAPI Test: ', end='')
+
         text = 'Secret-Text'
         password = 'Secret-password'
 
@@ -91,6 +91,8 @@ class MyTestCase(unittest.TestCase):
         self.assertDictEqual(response.json(), {'secret': text})
 
         self.assertFalse(self.manager.does_exist(secret_id))
+
+        print('OK')
 
 if __name__ == '__main__':
     unittest.main()
