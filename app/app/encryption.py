@@ -11,7 +11,7 @@ class Crypto:
     Attributes
     ----------
     cipher : Crypto.Cipher._mode_ecb.EcbMode
-        AES cipher with MODE_ENC and received key in __init__
+        AES cipher with MODE_ECB and received key in __init__
 
     Methods
     -------
