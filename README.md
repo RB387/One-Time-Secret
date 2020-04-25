@@ -16,7 +16,7 @@ API service for one time secrets
 
 >>>secret_key = '/secrets/f60a0191-ce68-44dd-b741-04543b97cdef?password=wrong'
 >>>response = client.get(secret_key)
->>>print(response.json())
+>>>print(response.status_code)
 401
 
 >>>secret_key = '/secrets/f60a0191-ce68-44dd-b741-04543b97cdef?password=PASS'
