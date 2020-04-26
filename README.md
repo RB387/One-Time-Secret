@@ -3,12 +3,12 @@
 API service for one time secrets
 
 ## Example:
-```
+```python
 >>>response = client.get('/generate/?secret=TEXT-MESSAGE&password=PASS')
 >>>print(response.json())
 {'secret-key': f60a0191-ce68-44dd-b741-04543b97cdef}
 ```
-```
+```python
 >>>secret_key = '/secrets/f60a0191-ce68-44dd-b741-04543b97cdef/'
 >>>response = client.get(secret_key)
 >>>print(response.status_code)
