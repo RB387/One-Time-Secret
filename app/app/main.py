@@ -3,6 +3,7 @@ import uuid
 from .dbmanager import DataBaseManager
 from .encryption import Crypto
 from .config import *
+from .response_errors import ResponseError
 
 
 app = FastAPI()
@@ -27,10 +28,12 @@ def generate_id() -> uuid.UUID:
 
     :return: uniq UUID
     '''
-    id = uuid.uuid4()
-    while manager.does_exist(id):
-        id = uuid.uuid4()
-    return id
+    secret_id = uuid.uuid4()
+
+    while manager.does_exist(secret_id):
+        secret_id = uuid.uuid4()
+
+    return secret_id
 
 
 @app.get('/generate')
@@ -59,13 +62,15 @@ async def generate(secret: str='', password: str='') -> dict:
             {'secret-key': id}
     '''
     if not (secret and password):
-        error = 'Bad request. No secret and/or password argument in request.'
-        raise HTTPException(status_code=400, detail=error)
-    id = generate_id()
+        raise HTTPException(status_code=400, detail=ResponseError.NO_ARGS.value)
+
+    secret_id = generate_id()
     secret = crypto.encrypt(secret)
     password = crypto.encrypt(password)
-    manager.insert(id, secret.decode(), password.decode())
-    return {'secret-key': id}
+
+    manager.insert(secret_id, secret.decode(), password.decode())
+
+    return {'secret-key': secret_id}
 
 
 @app.get('/secrets/{secret_key}')
@@ -105,16 +110,16 @@ async def secrets(secret_key: str, password: str='') -> dict:
             {'secret' message}
     '''
     if not manager.does_exist(secret_key):
-        error = 'Not found. This secret was deleted or never existed'
-        raise HTTPException(status_code=404, detail=error)
+        raise HTTPException(status_code=404, detail=ResponseError.NOT_FOUND.value)
+
     if not password:
-        error = 'Bad request. No password argument in request.'
-        raise HTTPException(status_code=400, detail=error)
+        raise HTTPException(status_code=400, detail=ResponseError.NO_ARGS.value)
 
     secret, password_true = manager.select(secret_key)
     password_true = crypto.decrypt(password_true)
+
     if password == password_true:
         manager.delete(secret_key)
         return {'secret': crypto.decrypt(secret)}
-    error = 'Wrong password'
-    raise HTTPException(status_code=401, detail=error)
+
+    raise HTTPException(status_code=401, detail=ResponseError.WRONG_PASSWORD.value)

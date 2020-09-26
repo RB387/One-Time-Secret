@@ -30,10 +30,10 @@ class Crypto:
         key = self.__append_bytes(12, key)
         self.cipher = AES.new(key, AES.MODE_ECB)
 
-    def __append_bytes(self, size: int, string: str) -> str:
+    def __append_bytes(self, size: int, string: str) -> bytes:
         return b' ' * (size-(len(string) % size)) + bytes(string, 'utf-8')
 
-    def encrypt(self, message: str) -> str:
+    def encrypt(self, message: str) -> bytes:
         '''Encrypt message
 
         Encrypt message with AES and code it with base64
@@ -44,7 +44,7 @@ class Crypto:
         message = self.__append_bytes(16, message)
         return base64.b64encode(self.cipher.encrypt(message))
 
-    def decrypt(self, message: str) -> str:
+    def decrypt(self, message: str) -> bytes:
         '''Decrypt message
 
         Decrypt message with AES and code it with base64
